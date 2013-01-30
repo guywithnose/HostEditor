@@ -1,0 +1,32 @@
+{
+  "IPs" : {
+    "local" : "127.0.0.1",
+  	"dev" : "243.65.78.40",
+  	"qa1" : "243.65.78.50",
+  	"qa2" : "243.65.78.60",
+  	"server1" : "243.65.78.80",
+  	"beta1" : "243.65.78.70",
+  	"beta2" : "243.65.78.90"
+  },
+  "aliases" : {
+    "default": "local",
+    "ignore": "dns",
+    "QA": "qa1",
+    "live": "server1",
+    "beta": "beta1"
+  },
+  "sites": {
+    "www.google.com": "qa1",
+    "www.yahoo.com": "qa2",
+    "www.msn.com": "dns",
+    "www.github.com": "DNS",
+    "ftp.google.com": "ignore",
+    "www.bouncyballs.com": "beta",
+    "www.wrappingducks.com": "live",
+    "www.speakercity.com": "lyve",
+    "dev.teddybear.com": "local",
+    "dev.jumpingmaniacs.com": "dev",
+    "dev.msn.com": "QA",
+    "dev.google.com": "default"
+  }
+}
