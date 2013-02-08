@@ -107,7 +107,7 @@
 		<manifest file="manifest.mf">
 			<!-- Add manifest attributes here.. -->
 			<attribute name="Class-Path" value="json.jar" />
-			<attribute name="Main-Class" value="hosts.Main" />
+			<attribute name="Main-Class" value="ui.Main" />
 		</manifest>
 		<jar compress="true" jarfile="${package.dir}/${package.file}" manifest="manifest.mf">
                   <fileset dir="${output.dir}" includes="**/*.class" >

@@ -18,10 +18,13 @@ import data.FileReader;
  */
 public class HostTest
 {
+  
   /**
-   * Test.
-   * @throws JSONException 
-   */
+     * Test.
+     * 
+     * @throws JSONException
+     *             the jSON exception
+     */
   @SuppressWarnings("static-method")
   @Test
   public void test() throws JSONException

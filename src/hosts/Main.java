@@ -32,7 +32,11 @@ public class Main
     }
     try {
       JSONObject confObject = new JSONObject(conf);
-      System.out.println(new HostFileCreator(confObject).buildHostFile());
+      HostFileCreator hfc = new HostFileCreator(confObject);
+      System.out.println(hfc.buildHostFile());
+      for (String error : hfc.getErrors()) {
+          System.err.println(error);
+      }
     } catch (JSONException e) {
       System.out.println("Conf file not valid JSON.");
       System.out.println(e.getMessage());
