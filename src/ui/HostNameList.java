@@ -244,5 +244,6 @@ public class HostNameList extends Observable
       }
       hostList.setSelectedIndices(intIndicies);
     }
+    searcher.filterList(hostSearch.getText());
   }
 }
