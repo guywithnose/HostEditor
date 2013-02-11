@@ -154,7 +154,7 @@ public class HostNameList extends Observable
       filteredInfo = new ArrayList<IPInfo>(info);
       for (IPInfo host : info)
       {
-        if (!host.toString().startsWith(filter))
+        if (host.toString().indexOf(filter) < 0)
         {
           filteredInfo.remove(host);
         }

@@ -210,6 +210,8 @@ public class MainWindow extends JFrame implements Observer
         if (!hfc.save(saveAsFile.getSelectedFile()))
         {
           JOptionPane.showMessageDialog(this, "Unable to write to file.");
+        } else {
+            openedFile = saveAsFile.getSelectedFile();
         }
       }
       break;

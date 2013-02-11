@@ -6,8 +6,12 @@ package ui;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
+import java.awt.MenuShortcut;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Class MainMenu.
@@ -41,16 +45,21 @@ public class MainMenu extends MenuBar
     public FileMenu()
     {
       setLabel("File");
-      String[] menuOptions = new String[]
-      {
-          "Open", "Save", "Save As", "Export", "Export As"
-      };
-      for (String option : menuOptions)
-      {
-        MenuItem item = new MenuItem(option);
-        item.addActionListener(new MenuAction());
-        add(item);
-      }
+      MenuItem open = new MenuItem("Open", new MenuShortcut(KeyEvent.VK_O));
+      open.addActionListener(new MenuAction());
+      add(open);
+      MenuItem save = new MenuItem("Save", new MenuShortcut(KeyEvent.VK_S));
+      save.addActionListener(new MenuAction());
+      add(save);
+      MenuItem saveAs = new MenuItem("Save As", new MenuShortcut(KeyEvent.VK_S, true));
+      saveAs.addActionListener(new MenuAction());
+      add(saveAs);
+      MenuItem export = new MenuItem("Export", new MenuShortcut(KeyEvent.VK_E));
+      export.addActionListener(new MenuAction());
+      add(export);
+      MenuItem exportAs = new MenuItem("Export As", new MenuShortcut(KeyEvent.VK_E, true));
+      exportAs.addActionListener(new MenuAction());
+      add(exportAs);
     }
   }
 
