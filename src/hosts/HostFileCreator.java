@@ -19,336 +19,314 @@ import data.FileWriter;
 public class HostFileCreator
 {
   /** The sites. */
-  private JSONObject sites;
+    private JSONObject sites;
 
-  /** The aliases. */
-  private JSONObject aliases;
+    /** The aliases. */
+    private JSONObject aliases;
 
-  /** The ips. */
-  private JSONObject ips;
+    /** The ips. */
+    private JSONObject ips;
 
-  /** The errors. */
-  private ArrayList<String> errors = new ArrayList<String>();
+    /** The errors. */
+    private ArrayList<String> errors = new ArrayList<String>();
 
-  /** The all ip info. */
-  private ArrayList<IPInfo> allIPInfo;
+    /** The all ip info. */
+    private ArrayList<IPInfo> allIPInfo;
 
-  /** The conf. */
-  private JSONObject conf;
-
-  /**
-   * The Class IPInfo.
-   */
-  public class IPInfo implements Comparable<IPInfo>
-  {
-    /** The ip. */
-    public String ip;
-
-    /** The ip name. */
-    public String ipName;
-
-    /** The alias. */
-    public String alias;
-
-    /** The host name. */
-    public String hostName;
+    /** The conf. */
+    private JSONObject conf;
 
     /**
-     * Instantiates a new iP info.
-     * 
-     * @param newIp
-     *          the new ip
-     * @param newIpName
-     *          the new ip name
-     * @param newAlias
-     *          the new alias
-     * @param newHostName
-     *          the new host name
+     * The Class IPInfo.
      */
-    public IPInfo(String newIp, String newIpName, String newAlias,
-        String newHostName)
+    public class IPInfo implements Comparable<IPInfo>
     {
-      ip = newIp;
-      ipName = newIpName;
-      alias = newAlias;
-      hostName = newHostName;
-    }
+        /** The ip. */
+        public String ip;
 
-    @Override
-    public String toString()
-    {
-      return hostName;
-    }
+        /** The ip name. */
+        public String ipName;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    @Override
-    public int compareTo(IPInfo other)
-    {
-      return hostName.compareTo(other.hostName);
-    }
-  }
+        /** The alias. */
+        public String alias;
 
-  /**
-   * Instantiates a new host file creator.
-   * 
-   * @param conf
-   *          the conf
-   * @throws JSONException
-   *           the jSON exception
-   */
-  public HostFileCreator(JSONObject newConf) throws JSONException
-  {
-    conf = newConf;
-    sites = conf.getJSONObject("sites");
-    aliases = conf.getJSONObject("aliases");
-    ips = conf.getJSONObject("IPs");
-  }
+        /** The host name. */
+        public String hostName;
 
-  public boolean setSiteToAlias(String site, String alias)
-  {
-    try
-    {
-      if (aliases.has(alias))
-      {
-        sites.put(site, alias);
-      }
-      conf.put("sites", sites);
-    } catch (JSONException e)
-    {
-      return false;
-    }
-    allIPInfo = null;
-    return true;
-  }
-
-  public boolean setSiteToServer(String site, String server)
-  {
-    try
-    {
-      if (ips.has(server))
-      {
-        sites.put(site, server);
-      }
-      conf.put("sites", sites);
-    } catch (JSONException e)
-    {
-      return false;
-    }
-    allIPInfo = null;
-    return true;
-  }
-
-  /**
-   * Gets the all ip info.
-   * 
-   * @return the all ip info
-   */
-  public List<IPInfo> getAllIPInfo()
-  {
-    if (allIPInfo == null)
-    {
-      allIPInfo = new ArrayList<IPInfo>();
-      @SuppressWarnings("unchecked")
-      Iterator<String> siteIterator = sites.keys();
-      while (siteIterator.hasNext())
-      {
-        String siteName = siteIterator.next();
-        IPInfo info = getIPInfo(siteName);
-        if (info != null)
+        /**
+         * Instantiates a new iP info.
+         * 
+         * @param newIp
+         *            the new ip
+         * @param newIpName
+         *            the new ip name
+         * @param newAlias
+         *            the new alias
+         * @param newHostName
+         *            the new host name
+         */
+        public IPInfo(String newIp, String newIpName, String newAlias, String newHostName)
         {
-          allIPInfo.add(info);
+            ip = newIp;
+            ipName = newIpName;
+            alias = newAlias;
+            hostName = newHostName;
         }
-      }
-    }
-    return allIPInfo;
-  }
 
-  /**
-   * Gets the all ip info.
-   * 
-   * @return the all ip info
-   */
-  public List<String> getAllAliases()
-  {
-    List<String> allAliases = new ArrayList<String>();
-    @SuppressWarnings("unchecked")
-    Iterator<String> aliasIterator = aliases.keys();
-    while (aliasIterator.hasNext())
-    {
-      allAliases.add(aliasIterator.next());
-    }
-    return allAliases;
-  }
+        @Override
+        public String toString()
+        {
+            return hostName;
+        }
 
-  /**
-   * Gets the all ip info.
-   * 
-   * @return the all ip info
-   */
-  public List<String> getAllServers()
-  {
-    List<String> allIps = new ArrayList<String>();
-    @SuppressWarnings("unchecked")
-    Iterator<String> aliasIterator = ips.keys();
-    while (aliasIterator.hasNext())
-    {
-      allIps.add(aliasIterator.next());
+        /*
+         * (non-Javadoc)
+         * 
+         * @see java.lang.Comparable#compareTo(java.lang.Object)
+         */
+        @Override
+        public int compareTo(IPInfo other)
+        {
+            return hostName.compareTo(other.hostName);
+        }
     }
-    allIps.add("dns");
-    return allIps;
-  }
 
-  /**
-   * Builds the host file.
-   * 
-   * @return the string
-   */
-  public String buildHostFile()
-  {
-    StringBuilder hostbuilder = new StringBuilder();
-    for (IPInfo info : getAllIPInfo())
+    /**
+     * Instantiates a new host file creator.
+     * 
+     * @param conf
+     *            the conf
+     * @throws JSONException
+     *             the jSON exception
+     */
+    public HostFileCreator(JSONObject newConf) throws JSONException
     {
-      if (info.ip != null)
-      {
-        hostbuilder.append(info.ip);
-        hostbuilder.append(" ");
-        hostbuilder.append(info.hostName);
-        hostbuilder.append("\n");
-      }
+        conf = newConf;
+        sites = conf.getJSONObject("sites");
+        aliases = conf.getJSONObject("aliases");
+        ips = conf.getJSONObject("IPs");
     }
-    return hostbuilder.toString();
-  }
 
-  /**
-   * Gets the iP info.
-   * 
-   * @param hostName
-   *          the host name
-   * @return the iP info
-   */
-  public IPInfo getIPInfo(String hostName)
-  {
-    try
+    public boolean setSiteToAlias(String site, String alias)
     {
-      String destination = sites.getString(hostName);
-      String ipName = destination;
-      String ip = getIP(destination);
-      String alias = null;
-      if (ip == null)
-      {
-        alias = destination;
-        ipName = getAliasIpName(destination);
-        ip = getIP(ipName);
-      }
-      return new IPInfo(ip, ipName, alias, hostName);
-    } catch (JSONException e)
-    {
-      return null;
+        try {
+            if (aliases.has(alias)) {
+                sites.put(site, alias);
+            }
+            conf.put("sites", sites);
+        } catch (JSONException e) {
+            return false;
+        }
+        allIPInfo = null;
+        return true;
     }
-  }
 
-  /**
-   * Gets the alias ip.
-   * 
-   * @param alias
-   *          the alias
-   * @return the alias ip
-   */
-  public String getAliasIpName(String alias)
-  {
-    String aliasDestination = getAlias(alias);
-    String ip = getIP(aliasDestination);
-    String lastAlias = aliasDestination;
-    String nextAlias = getAlias(aliasDestination);
-    while (ip == null && nextAlias != null && "dns" != nextAlias)
+    public boolean setSiteToServer(String site, String server)
     {
-      lastAlias = nextAlias;
-      ip = getIP(nextAlias);
-      nextAlias = getAlias(nextAlias);
+        try {
+            if (ips.has(server) || "dns".equals(server)) {
+                sites.put(site, server);
+            }
+            conf.put("sites", sites);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        allIPInfo = null;
+        return true;
     }
-    return lastAlias;
-  }
 
-  /**
-   * Gets the ip.
-   * 
-   * @param hostName
-   *          the ip name
-   * @return the ip
-   */
-  private String getIP(String hostName)
-  {
-    if ("dns".equalsIgnoreCase(hostName))
+    /**
+     * Gets the all ip info.
+     * 
+     * @return the all ip info
+     */
+    public List<IPInfo> getAllIPInfo()
     {
-      return null;
+        if (allIPInfo == null) {
+            allIPInfo = new ArrayList<IPInfo>();
+            @SuppressWarnings("unchecked")
+            Iterator<String> siteIterator = sites.keys();
+            while (siteIterator.hasNext()) {
+                String siteName = siteIterator.next();
+                IPInfo info = getIPInfo(siteName);
+                if (info != null) {
+                    allIPInfo.add(info);
+                }
+            }
+        }
+        return allIPInfo;
     }
-    try
-    {
-      return ips.getString(hostName);
-    } catch (JSONException e)
-    {
-      return null;
-    }
-  }
 
-  /**
-   * Gets the alias.
-   * 
-   * @param ipName
-   *          the ip name
-   * @return the alias
-   */
-  private String getAlias(String ipName)
-  {
-    try
+    /**
+     * Gets the all ip info.
+     * 
+     * @return the all ip info
+     */
+    public List<String> getAllAliases()
     {
-      return aliases.getString(ipName);
-    } catch (JSONException e)
-    {
-      return null;
+        List<String> allAliases = new ArrayList<String>();
+        @SuppressWarnings("unchecked")
+        Iterator<String> aliasIterator = aliases.keys();
+        while (aliasIterator.hasNext()) {
+            allAliases.add(aliasIterator.next());
+        }
+        return allAliases;
     }
-  }
 
-  /**
-   * Get Errors.
-   * 
-   * @return the errors
-   */
-  public ArrayList<String> getErrors()
-  {
-    return errors;
-  }
-
-  /**
-   * Save.
-   */
-  public boolean save(File file)
-  {
-    try
+    /**
+     * Gets the all ip info.
+     * 
+     * @return the all ip info
+     */
+    public List<String> getAllServers()
     {
-      return FileWriter.putFileContents(file, conf.toString(2));
-    } catch (JSONException e)
-    {
-      e.printStackTrace();
-      return false;
+        List<String> allIps = new ArrayList<String>();
+        @SuppressWarnings("unchecked")
+        Iterator<String> aliasIterator = ips.keys();
+        while (aliasIterator.hasNext()) {
+            allIps.add(aliasIterator.next());
+        }
+        allIps.add("dns");
+        return allIps;
     }
-  }
 
-  /**
-   * @param selectedFile
-   * @return
-   */
-  public boolean export(File file)
-  {
-    String hostFile = buildHostFile();
-    if (errors.size() != 0)
+    /**
+     * Builds the host file.
+     * 
+     * @return the string
+     */
+    public String buildHostFile()
     {
-      return false;
+        StringBuilder hostbuilder = new StringBuilder();
+        for (IPInfo info : getAllIPInfo()) {
+            if (info.ip != null) {
+                hostbuilder.append(info.ip);
+                hostbuilder.append(" ");
+                hostbuilder.append(info.hostName);
+                hostbuilder.append("\n");
+            }
+        }
+        return hostbuilder.toString();
     }
-    return FileWriter.putFileContents(file, hostFile);
-  }
+
+    /**
+     * Gets the iP info.
+     * 
+     * @param hostName
+     *            the host name
+     * @return the iP info
+     */
+    public IPInfo getIPInfo(String hostName)
+    {
+        try {
+            String destination = sites.getString(hostName);
+            String ipName = destination;
+            String ip = getIP(destination);
+            String alias = null;
+            if (ip == null) {
+                alias = destination;
+                ipName = getAliasIpName(destination);
+                ip = getIP(ipName);
+            }
+            return new IPInfo(ip, ipName, alias, hostName);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Gets the alias ip.
+     * 
+     * @param alias
+     *            the alias
+     * @return the alias ip
+     */
+    public String getAliasIpName(String alias)
+    {
+        String aliasDestination = getAlias(alias);
+        String ip = getIP(aliasDestination);
+        String lastAlias = aliasDestination;
+        String nextAlias = getAlias(aliasDestination);
+        while (ip == null && nextAlias != null && "dns" != nextAlias) {
+            lastAlias = nextAlias;
+            ip = getIP(nextAlias);
+            nextAlias = getAlias(nextAlias);
+        }
+        return lastAlias;
+    }
+
+    /**
+     * Gets the ip.
+     * 
+     * @param hostName
+     *            the ip name
+     * @return the ip
+     */
+    private String getIP(String hostName)
+    {
+        if ("dns".equalsIgnoreCase(hostName)) {
+            return null;
+        }
+        try {
+            return ips.getString(hostName);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Gets the alias.
+     * 
+     * @param ipName
+     *            the ip name
+     * @return the alias
+     */
+    private String getAlias(String ipName)
+    {
+        try {
+            return aliases.getString(ipName);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Get Errors.
+     * 
+     * @return the errors
+     */
+    public ArrayList<String> getErrors()
+    {
+        return errors;
+    }
+
+    /**
+     * Save.
+     */
+    public boolean save(File file)
+    {
+        try {
+            return FileWriter.putFileContents(file, conf.toString(2));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * @param selectedFile
+     * @return
+     */
+    public boolean export(File file)
+    {
+        String hostFile = buildHostFile();
+        if (errors.size() != 0) {
+            for (String error : errors) {
+              System.err.println(error);
+            }
+            return false;
+        }
+        return FileWriter.putFileContents(file, hostFile);
+    }
 }

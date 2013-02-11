@@ -43,7 +43,7 @@ public class MainMenu extends MenuBar
       setLabel("File");
       String[] menuOptions = new String[]
       {
-          "Open", "Save", "Save As", "Export"
+          "Open", "Save", "Save As", "Export", "Export As"
       };
       for (String option : menuOptions)
       {

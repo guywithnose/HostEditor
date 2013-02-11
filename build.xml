@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="HostEditor" basedir="." default="run">
+<project name="HostEditor" basedir="." default="package">
 
 	<!-- Project details -->
 	<property name="project.version" value="0.1" />

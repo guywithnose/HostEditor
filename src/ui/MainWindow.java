@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import data.FileReader;
+import data.FileWriter;
 
 /**
  * The Class MainWindow.
@@ -42,10 +43,17 @@ public class MainWindow extends JFrame implements Observer
   private AliasList aliasList;
 
   private File openedFile;
+  
+  private JSONObject preferences;
 
   public MainWindow()
   {
-    selectFile();
+    readPreferences();
+    try {
+        initialize(new File(preferences.getString("confFile")));
+    } catch (JSONException e) {
+        selectFile();
+    }
     if (!isVisible()) {
       System.exit(0);
     }
@@ -62,7 +70,7 @@ public class MainWindow extends JFrame implements Observer
         try
         {
           initialize(findConf.getSelectedFile());
-          //TODO Save to conf
+          writePreferences("confFile", findConf.getSelectedFile().toString());
           return;
         } catch (JSONException e)
         {
@@ -71,6 +79,26 @@ public class MainWindow extends JFrame implements Observer
       } else {
         return;
       }
+    }
+  }
+
+  private void readPreferences()
+  {
+      String preferenceData = FileReader.getFileContents("preferences.json");
+      try {
+          preferences = new JSONObject(preferenceData);
+      } catch (Exception e) {
+          preferences = new JSONObject();
+      }
+  }
+
+  private void writePreferences(String name, String value)
+  {
+      try {
+          preferences.put(name, value);
+        FileWriter.putFileContents("preferences.json", preferences.toString(4));
+    } catch (JSONException e) {
+        e.printStackTrace();
     }
   }
 
@@ -157,6 +185,12 @@ public class MainWindow extends JFrame implements Observer
    */
   public void sendAction(String actionCommand)
   {
+      String hostDir;
+      if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
+          hostDir = "C:\\Windows\\System32\\drivers\\etc";
+      } else {
+          hostDir = "/etc";
+      }
     switch (actionCommand)
     {
     case "Open":
@@ -180,24 +214,29 @@ public class MainWindow extends JFrame implements Observer
       }
       break;
     case "Export":
-      String hostDir;
-      if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
-          hostDir = "C:\\Windows\\System32\\drivers\\etc";
-      } else {
-          hostDir = "/etc";
-      }
-      JFileChooser exportHost = new JFileChooser(new File(hostDir));
-      int exportResult = exportHost.showSaveDialog(this);
-      if (exportResult == JFileChooser.APPROVE_OPTION)
-      {
-        if (!hfc.export(exportHost.getSelectedFile()))
+            try {
+                String hostFile = preferences.getString("hostFile");
+                if (!hfc.export(new File(hostFile)))
+                {
+                    sendAction("Export As");
+                }
+            } catch (JSONException e) {
+                sendAction("Export As");
+            }
+        break;
+    case "Export As":
+        JFileChooser exportHost = new JFileChooser(new File(hostDir));
+        int exportResult = exportHost.showSaveDialog(this);
+        if (exportResult == JFileChooser.APPROVE_OPTION)
         {
-          JOptionPane.showMessageDialog(this, "Unknown error.");
-        } else {
-          //TODO Save to conf
+          if (!hfc.export(exportHost.getSelectedFile()))
+          {
+            JOptionPane.showMessageDialog(this, "Unknown error.");
+          } else {
+              writePreferences("hostFile", exportHost.getSelectedFile().toString());
+          }
         }
-      }
-      break;
+        break;
     }
   }
 }
