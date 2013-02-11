@@ -62,6 +62,7 @@ public class MainWindow extends JFrame implements Observer
         try
         {
           initialize(findConf.getSelectedFile());
+          //TODO Save to conf
           return;
         } catch (JSONException e)
         {
@@ -179,13 +180,21 @@ public class MainWindow extends JFrame implements Observer
       }
       break;
     case "Export":
-      JFileChooser exportHost = new JFileChooser(new File("C:\\Windows\\System32\\drivers\\etc"));
+      String hostDir;
+      if (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0) {
+          hostDir = "C:\\Windows\\System32\\drivers\\etc";
+      } else {
+          hostDir = "/etc";
+      }
+      JFileChooser exportHost = new JFileChooser(new File(hostDir));
       int exportResult = exportHost.showSaveDialog(this);
       if (exportResult == JFileChooser.APPROVE_OPTION)
       {
         if (!hfc.export(exportHost.getSelectedFile()))
         {
           JOptionPane.showMessageDialog(this, "Unknown error.");
+        } else {
+          //TODO Save to conf
         }
       }
       break;
