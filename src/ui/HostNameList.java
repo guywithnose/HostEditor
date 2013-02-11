@@ -226,6 +226,9 @@ public class HostNameList extends Observable
     }
     searcher = new CellSearcher(hostNames);
     hostList.setModel(searcher);
+    if (!"Search".equals(hostSearch.getText())) {
+      searcher.filterList(hostSearch.getText());
+    }
     if (currentSelection.size() > 0)
     {
       ListModel<IPInfo> model = hostList.getModel();
@@ -244,6 +247,5 @@ public class HostNameList extends Observable
       }
       hostList.setSelectedIndices(intIndicies);
     }
-    searcher.filterList(hostSearch.getText());
   }
 }

@@ -166,17 +166,25 @@ public class MainWindow extends JFrame implements Observer
     } else if (observable == aliasList)
     {
       serverList.select(hfc.getAliasIpName(aliasList.getSelectedAlias()));
-      for (IPInfo host : hostNameList.getSelectedHosts()) {
-        hfc.setSiteToAlias(host.hostName, aliasList.getSelectedAlias());
+      if (hostNameList.getSelectedHosts().size() == 0) {
+          // TODO Select affected sites
+      } else {
+          for (IPInfo host : hostNameList.getSelectedHosts()) {
+            hfc.setSiteToAlias(host.hostName, aliasList.getSelectedAlias());
+          }
+          hostNameList.update(hfc.getAllIPInfo());
       }
-      hostNameList.update(hfc.getAllIPInfo());
     } else if (observable == serverList)
     {
       aliasList.select(null);
-      for (IPInfo host : hostNameList.getSelectedHosts()) {
-        hfc.setSiteToServer(host.hostName, serverList.getSelectedServer());
+      if (hostNameList.getSelectedHosts().size() == 0) {
+          // TODO Select affected sites and aliases
+      } else {
+          for (IPInfo host : hostNameList.getSelectedHosts()) {
+            hfc.setSiteToServer(host.hostName, serverList.getSelectedServer());
+          }
+          hostNameList.update(hfc.getAllIPInfo());
       }
-      hostNameList.update(hfc.getAllIPInfo());
     }
   }
 
