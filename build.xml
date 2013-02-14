@@ -23,7 +23,7 @@
 	<property name="j2se.apiurl" value="http://docs.oracle.com/javase/6/docs/api/" />
 
 	<path id="project.classpath">
-		<pathelement location="lib/json.jar" />
+<!--		<pathelement location="lib/json.jar" />-->
 	</path>
 
 	<path id="coverage.classpath">
@@ -106,14 +106,14 @@
 		description="Create the .jar file">
 		<manifest file="manifest.mf">
 			<!-- Add manifest attributes here.. -->
-			<attribute name="Class-Path" value="json.jar" />
+<!--			<attribute name="Class-Path" value="json.jar" />-->
 			<attribute name="Main-Class" value="ui.Main" />
 		</manifest>
 		<jar compress="true" jarfile="${package.dir}/${package.file}" manifest="manifest.mf">
                   <fileset dir="${output.dir}" includes="**/*.class" >
                     <exclude name="**/tests/**/*.class"/>
 		  </fileset>
-                  <zipgroupfileset dir="lib" includes="json.jar" />
+<!--                  <zipgroupfileset dir="lib" includes="json.jar" />-->
 		</jar>
 	</target>
 
